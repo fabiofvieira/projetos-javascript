@@ -5,6 +5,33 @@ module.exports.getAll = (limit = 10) => {
     return Post.findAll({ include: [ User, Category, Tag ], limit: limit});
 }
 
+module.exports.getPaginated = (page = 1, perPage = 10) => {
+    return new Promise((resolve, reject) => {
+        Post.findAndCountAll()
+            .then((d) => {
+                let paginationData = {
+                    total: d.count,
+                    pages: Math.ceil(d.count / perPage),
+                    atual: page,
+                    hasNext: Math.ceil(d.count / perPage) > page
+                };
+                Post.findAll({
+                    limit: perPage,
+                    offset: perPage * (page - 1),
+                    $sort: { id: 1 },
+                    include: [
+                        { model: User, attributes : ['name'] }, 
+                        { model: Category, attributes: ['name'] }, 
+                        { model: Tag, through: { attributes: [] }, attributes: ['name'] }
+                    ],
+                    attributes: [ 'id', 'title', 'slug', 'content', 'UserId', 'CategoryId' ]
+                })
+                .then(r => resolve({ result: r, ...paginationData }))
+                .catch(err => reject(err));
+            }).catch(err => reject(err));
+    })
+}
+
 module.exports.create = (data) => {
     return new Promise((resolve, reject) => {
         Post
