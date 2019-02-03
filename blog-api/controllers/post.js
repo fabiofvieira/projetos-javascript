@@ -2,14 +2,14 @@ const repository = require('../repositories/post');
 
 module.exports.get = (req, res, next) => {
     repository
-        .getAll().then(r => res.send(r));
+        .getAll(10).then(r => res.send(r));
 }
 
 module.exports.create = (req, res, next) => {
     repository
         .create(req.body)
-        .then(r => res.send(r))
-        .catch(err => res.send(400, err));
+        .then(r => res.status(201).send(r))
+        .catch(err => res.status(400).send(err));
 }
 
 module.exports.categories = (req, res, next) => {

@@ -3,11 +3,14 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     slug: DataTypes.STRING,
     content: DataTypes.TEXT,
-    userId: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER,
+    CategoryId: DataTypes.INTEGER
   });
 
   Post.associate = (models) => {
       Post.belongsTo(models.User);
+      Post.belongsTo(models.Category);
+      Post.Tags = Post.belongsToMany(models.Tag, { through: models.PostTag });
   }
   return Post;
 }

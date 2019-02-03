@@ -5,12 +5,8 @@ module.exports = {
     return queryInterface.createTable('Posts', {
       id:         { allowNull: false, autoIncrement: true, primaryKey: true, type: DataTypes.INTEGER },
       title:      { allowNull: false, type: DataTypes.STRING },
-      userId:     { allowNull: false, type: DataTypes.INTEGER,
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
-      },
+      userId:     { allowNull: false, type: DataTypes.INTEGER, references: { model: 'Users', key: 'id' } },
+      categoryId: { allowNull: false, type: DataTypes.INTEGER, references: { model: 'Categories', key: 'id' } },
       slug:       { allowNull: true, type: DataTypes.STRING, unique: true },
       content:    { allowNull: true, type: DataTypes.TEXT },
       createdAt:  { allowNull: false, type: DataTypes.DATE },
