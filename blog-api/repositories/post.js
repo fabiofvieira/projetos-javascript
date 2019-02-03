@@ -2,20 +2,28 @@ const { Post, User, Category, Tag } = require('../models');
 const slugify = require('slugify');
 
 module.exports.getAll = (limit = 10) => {
-    return Post.findAll({ include: [ User, Category, Tag ], limit: limit});
+    return Post.findAll({
+        attributes: ['id', 'title', 'content', 'slug', 'UserId', 'CategoryId' ],
+        include: [ 
+            { model: User, attributes: ['name'] }, 
+            { model: Category, attributes: ['name'] }, 
+            { model: Tag, attributes: ['name'], through: { attributes: [] } }
+        ],
+        limit: limit});
 }
 
-module.exports.getPaginated = (page = 1, perPage = 10) => {
+module.exports.getPaginated = (page = 1, perPage = 10, query = []) => {
     return new Promise((resolve, reject) => {
-        Post.findAndCountAll()
-            .then((d) => {
+        (query.length == 0 ? Post.count() : Post.count(query))
+            .then((count) => {
                 let paginationData = {
-                    total: d.count,
-                    pages: Math.ceil(d.count / perPage),
+                    total: count,
+                    pages: Math.ceil(count / perPage),
                     atual: page,
-                    hasNext: Math.ceil(d.count / perPage) > page
+                    hasNext: Math.ceil(count / perPage) > page
                 };
                 Post.findAll({
+                    ...query,
                     limit: perPage,
                     offset: perPage * (page - 1),
                     $sort: { id: 1 },
@@ -37,15 +45,13 @@ module.exports.create = (data) => {
         Post
             .create(data)
             .then(created_post => {
-                //console.log('tags:::', data.tags);
-                if(data.tags.length > 0) {
+                if(data.tags.length > 0)
                     created_post.addTags(data.tags).catch(err => { console.log(err) });
-                }
                 Post
                     .update({ 
                         slug: slugify(`${created_post.title}-${created_post.id}`).toLowerCase()
                     }, { where: { id: created_post.id }})
-                    .then(post => resolve(Post.findByPk(created_post.id, { include: [ User, Category, Tag ]})))
+                    .then(() => resolve(Post.findByPk(created_post.id, { include: [ User, Category, Tag ]})))
                     .catch(err => { throw err })
 
             })
@@ -56,13 +62,7 @@ module.exports.create = (data) => {
 
 module.exports.getBySlug = (slug) => {
     return Post.findOne({
-        where: {
-            slug: slug
-        },
-        include: [
-            User,
-            Category,
-            Tag
-        ]
+        where: { slug: slug },
+        include: [ User, Category, Tag ]
     })
 }
