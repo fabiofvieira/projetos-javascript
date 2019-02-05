@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-const NotLogged = () => {
-    return (<div>Não Logado</div>)
-}
+import Error401 from '../pages/errors/Error401';
 
 const PrivateRoute = ({ component: Component }, ...rest) => {
     const isLogged = () => {
@@ -11,7 +9,7 @@ const PrivateRoute = ({ component: Component }, ...rest) => {
     }
     return (
         <Route {...rest} render={(props) => (
-            isLogged() ? <Component {...props} />: <NotLogged/>
+            isLogged() ? <Component {...props} />: <Error401/>
           )} />
     )   
 }
