@@ -18,3 +18,17 @@ module.exports.create = (data, doLogin = false) => {
         }).catch(err => reject(err))
     });
 }
+
+
+module.exports.authenticate = ( data ) => {
+    return new Promise((resolve, reject) => {
+        User.getOne({
+            where: {
+                email: data.email,
+                password: data.password
+            }
+        }).then(user => {
+            
+        }).catch(err => reject(err));
+    })
+}
