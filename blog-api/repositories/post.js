@@ -4,6 +4,7 @@ const slugify = require('slugify');
 module.exports.getAll = (limit = 10) => {
     return Post.findAll({
         attributes: ['id', 'title', 'content', 'slug', 'UserId', 'CategoryId' ],
+        order: [['id', 'desc']], 
         include: [ 
             { model: User, attributes: ['name'] }, 
             { model: Category, attributes: ['name'] }, 
@@ -26,7 +27,7 @@ module.exports.getPaginated = (page = 1, perPage = 10, query = []) => {
                     ...query,
                     limit: perPage,
                     offset: perPage * (page - 1),
-                    $sort: { id: 1 },
+                    order: [['id', 'desc']], 
                     include: [
                         { model: User, attributes : ['name'] }, 
                         { model: Category, attributes: ['name'] }, 

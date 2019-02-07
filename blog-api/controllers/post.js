@@ -12,10 +12,6 @@ module.exports.create = (req, res, next) => {
         .catch(err => res.status(400).send(err));
 }
 
-module.exports.categories = (req, res, next) => {
-    res.send('categorias');
-}
-
 module.exports.posts = (req, res, next) => {
     let page = req.params.page;
     repository.getPaginated(page, 10, {}).then(r => {
