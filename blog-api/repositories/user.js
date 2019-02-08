@@ -22,13 +22,14 @@ module.exports.create = (data, doLogin = false) => {
 
 module.exports.authenticate = ( data ) => {
     return new Promise((resolve, reject) => {
-        User.getOne({
+        User.findOne({
             where: {
                 email: data.email,
                 password: data.password
             }
         }).then(user => {
-            
+            if(!user) reject('Usuário não encontrado');
+            resolve(user);
         }).catch(err => reject(err));
     })
 }

@@ -7,12 +7,12 @@ module.exports.generateToken = async ( data ) => {
 }
 
 module.exports.decodeToken = async ( token ) => {
-   return await jwt.verify(token, salt);
+   const data = await jwt.verify(token, salt);
+   return data;
 }
 
 module.exports.authorize = (req, res, next) => {
-    const token = req.body.token || req.query.token ||req.headers['x-access-token'];
-
+    const token = (req.body.token || req.query.token ||req.headers['x-access-token'] || req.headers['authorization']).replace('Bearer ','');
     if(!token) {
         res.status(401).send({
             message: 'Usuário não autenticado'
