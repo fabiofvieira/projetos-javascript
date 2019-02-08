@@ -16,7 +16,7 @@ const AuthMiddleware = (req, res, next) => {
 router.get('/', PostCtrl.get);
 router.get('/posts/:page?', PostCtrl.posts);
 router.get('/post/:slug', PostCtrl.getBySlug);
-router.get('/categorias', CategoryCtrl.getList);
+router.get('/categorias',  CategoryCtrl.getList);
 router.post('/usuario/novo', UserCtrl.create);
 router.post('/login', UserCtrl.authorize);
 
