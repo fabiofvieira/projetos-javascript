@@ -13,6 +13,7 @@ import Find from './pages/Find';
 import PrivateRoute from './middlewares/PrivateRoute';
 import Error404 from './pages/errors/Error404';
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 class App extends Component {
   render() {
@@ -39,6 +40,7 @@ class App extends Component {
               <Route path='*' component={Error404} />
             </Switch>
           </div>
+          <Footer/>
         </React.Fragment>
       </BrowserRouter>
     );
