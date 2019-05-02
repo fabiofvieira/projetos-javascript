@@ -3,22 +3,23 @@ const router = express.Router();
 
 const PostCtrl = require('../controllers/post');
 const UserCtrl = require('../controllers/user');
+const CategoryCtrl = require('../controllers/category');
+const AuthService = require('../services/auth');
+
 
 const AuthMiddleware = (req, res, next) => {
     console.log('middleware');
-    if(!!!req.headers.authorization) {
-        res.sendStatus(401);
-    } else { 
-        next();
-    }
+    AuthService.authorize(req, res, next);
 }
 
 // No Auth
 router.get('/', PostCtrl.get);
 router.get('/posts/:page?', PostCtrl.posts);
 router.get('/post/:slug', PostCtrl.getBySlug);
-router.get('/categorias', PostCtrl.categories);
+router.get('/categorias',  CategoryCtrl.getList);
 router.post('/usuario/novo', UserCtrl.create);
+router.post('/login', UserCtrl.authorize);
+
 
 // Auth
 router.post('/posts', AuthMiddleware, PostCtrl.create);

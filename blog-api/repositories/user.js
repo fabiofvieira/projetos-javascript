@@ -18,3 +18,18 @@ module.exports.create = (data, doLogin = false) => {
         }).catch(err => reject(err))
     });
 }
+
+
+module.exports.authenticate = ( data ) => {
+    return new Promise((resolve, reject) => {
+        User.findOne({
+            where: {
+                email: data.email,
+                password: data.password
+            }
+        }).then(user => {
+            if(!user) reject('Usuário não encontrado');
+            resolve(user);
+        }).catch(err => reject(err));
+    })
+}
