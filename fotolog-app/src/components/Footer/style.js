@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 
 export const Footer = styled.footer`
@@ -11,7 +12,7 @@ export const Footer = styled.footer`
     
 `;
 
-export const NewPicture = styled.button`
+export const NewPicture = styled(Link)`
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     background: white;
     color: #222;
