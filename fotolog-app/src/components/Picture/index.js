@@ -1,29 +1,54 @@
 import React from 'react';
-import { PictureContainer, Picture as PicComponent, PictureComments, PictureCommentsSeeMore, PictureUser } from './style';
+
+import {
+    PictureContainer,
+    Picture as PicComponent,
+    PictureButtons,
+    PictureButton,
+    PictureComment,
+    PictureComments,
+    PictureCommentsSeeMore,
+    PictureUser
+} from './style';
+
+import { 
+    FaHeart,
+    FaComment
+} from 'react-icons/fa';
+
+
 export default class Picture extends React.Component {
     constructor (props) {
         super(props);
         this.state = { liked: false };
     }
     likeUnline = () => {
-        alert(!this.state.liked ? 'Like' : 'Unlike');
         this.setState({liked: !this.state.liked });
     }
     render() {
-        const StyleLiked = this.state.liked ? { backgroundColor: 'red' } : {}; 
         return (
-            <PictureContainer style={StyleLiked}>
+            <PictureContainer>
                 <PictureUser>
                     <span>{this.props.user}</span>
                 </PictureUser>
-                <PicComponent src={this.props.src} onDoubleClick={ () => this.likeUnline() }/>
+                <PicComponent src={this.props.src} onClick={ () => this.likeUnline() }/>
+                <PictureButtons>
+                    <PictureButton>
+                        <FaHeart color={ this.state.liked ? 'red' : 'grey' } onClick={ () => this.likeUnline() }/>
+                        <span>(55)</span>
+                    </PictureButton>
+                    <PictureButton>
+                        <FaComment color='grey' onClick={ () => this.likeUnline() }/>
+                        <span>(55)</span>
+                    </PictureButton>
+                </PictureButtons>
                 <PictureComments>
                     {this.props.comments.filter((v, k) => k < 5).map((v, k) => {
                         return (
-                            <div>
-                                <strong>{v.name}</strong>
+                            <PictureComment key={k}>
+                                <strong style={{ paddingRight: '0.2rem' }}>{v.name}:</strong>
                                 <span>{v.comment}</span>
-                            </div>
+                            </PictureComment>
                         )
                     })}
                 </PictureComments>
